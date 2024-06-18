@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { TextInput } from "../components/Input";
 
 export default function SingUp() {
   return (
@@ -10,37 +11,38 @@ export default function SingUp() {
           </h1>
         </div>
         <form className="p-3 flex flex-col gap-3 w-full" autoComplete="off">
-          <input
+          <TextInput
             type="email"
             name="email"
-            placeholder="E-mail"
+            placeholderText="E-mail"
             autoComplete="off"
           />
 
-          <input
-            type="name"
+          <TextInput
+            type="text"
             name="name"
-            placeholder="Nome"
+            placeholderText="Nome"
             autoComplete="off"
           />
 
-          <input
+          <TextInput
             type="password"
             name="password"
-            placeholder="Senha"
+            placeholderText="Senha"
             autoComplete="off"
           />
 
-          <input
+          <TextInput
             type="password"
             name="confirmPassword"
-            placeholder="Confirme sua senha"
+            placeholderText="Confirme sua senha"
             autoComplete="off"
           />
 
           <button className="flex justify-center items-center outline-none border-none h-auto py-3 px-6 bg-blue-400 text-white rounded-lg w-full focus:outline-none">
             Cadastrar
           </button>
+
           <Link to="/" className="text-gray-400 text-center">
             Voltar
           </Link>
