@@ -3,11 +3,13 @@
 
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { TextInputProps } from "../types/components";
 
-export const TextInput = (props: any) => {
-  const { name, type, value, placeholderText, ...rest } = props;
+export const TextInput = (props: TextInputProps) => {
+  const { name, type, value, placeholderText, register, ...rest } = props;
 
   const [visiblePassword, setVisiblePassword] = useState(false);
+
   const [errorsLabel, setErrorsLabel] = useState(false);
 
   return (
@@ -16,10 +18,9 @@ export const TextInput = (props: any) => {
         className={`w-full h-auto rounded-lg bg-white focus:accent-transparent relative`}
       >
         <input
-          {...rest}
           type={visiblePassword ? "text" : type}
           placeholder={placeholderText}
-          // {...register(name)}
+          {...register(name)}
           className={`rounded-lg py-3 px-6 focus:accent-transparent w-full h-auto placeholder-shown:capitalize placeholder-shown:text-gray-regular placeholder:text-14
             ${
               errorsLabel
@@ -27,6 +28,7 @@ export const TextInput = (props: any) => {
                 : "outline-yellow-500 border-2 border-blue-400"
             }
             `}
+          {...rest}
           // value=""
           // defaultValue=""
         />
