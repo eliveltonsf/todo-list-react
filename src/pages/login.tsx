@@ -4,6 +4,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SyntheticEvent, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 import logo from "../assets/logo.png";
 import { TextInput } from "../components/Input";
@@ -54,6 +55,7 @@ export default function Login() {
             autoComplete="off"
             onChange={handleInputChange}
             register={register}
+            errorsLabel={errors.email?.message}
           />
           <TextInput
             type="password"
@@ -62,10 +64,15 @@ export default function Login() {
             autoComplete="off"
             onChange={handleInputChange}
             register={register}
+            errorsLabel={errors.password?.message}
           />
           <button className="flex justify-center items-center outline-none border-none h-auto py-3 px-6 bg-blue-400 text-white rounded-lg w-full focus:outline-none">
             Entrar
           </button>
+
+          <Link to="/cadastro" className="text-gray-400 text-center">
+            Cadastrar-se
+          </Link>
         </form>
       </div>
     </main>

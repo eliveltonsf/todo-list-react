@@ -6,11 +6,10 @@ import { useState } from "react";
 import { TextInputProps } from "../types/components";
 
 export const TextInput = (props: TextInputProps) => {
-  const { name, type, value, placeholderText, register, ...rest } = props;
+  const { name, type, value, placeholderText, register, errorsLabel, ...rest } =
+    props;
 
   const [visiblePassword, setVisiblePassword] = useState(false);
-
-  const [errorsLabel, setErrorsLabel] = useState(false);
 
   return (
     <div className="w-full">
@@ -53,6 +52,12 @@ export const TextInput = (props: TextInputProps) => {
           />
         )}
       </div>
+
+      {errorsLabel && (
+        <span className="text-xs font-medium text-red-400 mt-4">
+          {errorsLabel}
+        </span>
+      )}
     </div>
   );
 };

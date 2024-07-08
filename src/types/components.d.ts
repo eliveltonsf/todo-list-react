@@ -7,4 +7,5 @@ export type TextInputProps = {
   value?: string;
   register?: UseFormRegister;
   placeholderText: string;
+  errorsLabel?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
