@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { z } from "zod";
 import logo from "../assets/logo.png";
 import { TextInput } from "../components/Input";
+import { useAuth } from "../hooks/auth";
 import { LoginUserFormProps } from "../types/user";
 import loginUserFormSchema from "../util/loginUserFormSchema";
 
@@ -15,6 +16,9 @@ export default function Login() {
   const schema = loginUserFormSchema();
   type LoginUserFormSchema = z.infer<typeof schema>;
 
+  const { methodSignIn } = useAuth();
+
+  const [loading, setLoading] = useState(false);
   const [loginFormData, setLoginFormData] = useState<LoginUserFormProps>(
     {} as LoginUserFormProps
   );
@@ -35,7 +39,20 @@ export default function Login() {
     });
   };
 
-  const handleLoginData = () => {};
+  const handleLoginData = async () => {
+    setLoading(true);
+
+    try {
+      await methodSignIn({
+        email: loginFormData.email,
+        password: loginFormData.password,
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
 
   return (
     <main className="flex flex-1 justify-center items-center w-full h-svh m-auto">
@@ -43,6 +60,7 @@ export default function Login() {
         <div className="flex flex-col items-center justify-center mb-9 w-full">
           <img src={logo} alt="logo" className="h-48" />
         </div>
+        {loading && "Loading...."}
         <form
           onSubmit={handleSubmit(handleLoginData)}
           className="p-3 flex flex-col gap-3 w-full"

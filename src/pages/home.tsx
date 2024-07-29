@@ -1,7 +1,11 @@
+import { useAuth } from "../hooks/auth";
+
 export default function Home() {
+  const { name, methodSignOut } = useAuth();
   return (
-    <main className="bg-red-500">
-      <h1>Home</h1>
+    <main>
+      <h1>{name}</h1>
+      <button onClick={methodSignOut}>Sair</button>
     </main>
   );
 }
