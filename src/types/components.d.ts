@@ -9,3 +9,7 @@ export type TextInputProps = {
   placeholderText: string;
   errorsLabel?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
+
+export interface HeaderProps {
+  user: string;
+}

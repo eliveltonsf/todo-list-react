@@ -1,11 +1,23 @@
-import { useAuth } from "../hooks/auth";
+import { Header } from "../components/Header";
 
 export default function Home() {
-  const { name, methodSignOut } = useAuth();
   return (
-    <main>
-      <h1>{name}</h1>
-      <button onClick={methodSignOut}>Sair</button>
+    <main className="flex justify-center items-center overflow-scroll">
+      <div className="max-w-7xl h-svh w-full after:contents-[''] after:table after:clear-both p-3 ">
+        <Header user="Elivelton" />
+
+        <div className="h-auto w-full backdrop:blur-sm flex flex-col rounded-lg my-3 flex-wrap mb-6">
+          <div className="flex flex-wrap gap-2">
+
+            {/* 
+            - form
+            - TextInput 
+            - button ADD
+            */}
+
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
