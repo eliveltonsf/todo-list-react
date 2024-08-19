@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SyntheticEvent, useState } from "react";
+import { CircularProgress } from "@mui/material";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
+import ListTask, { TaskProps } from "../components/ListTask";
 import api from "../services/api";
 import createTaskFormSchema from "../util/createTaskFormSchema";
 
@@ -14,6 +16,10 @@ export default function Home() {
   const [taskFormData, setTaskFormData] = useState<CreateTaskFormState>(
     {} as CreateTaskFormState
   );
+  const [dataTasks, setDataTasks] = useState<TaskProps[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const {
     register,
@@ -23,6 +29,34 @@ export default function Home() {
   } = useForm<CreateTaskFormState>({
     resolver: zodResolver(schema),
   });
+
+  const loadTaskData = useCallback(async () => {
+    const task = await api.get(`api/task?offset=${currentPage}&limit=5`);
+
+    const data: TaskProps[] = task?.data?.tasks.map((item: TaskProps) => {
+      return {
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        status: item.status,
+      };
+    });
+
+    const totalPage = task.data.totalPages;
+
+    setDataTasks(data);
+    setTotalPage(totalPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    loadTaskData();
+  }, [loadTaskData]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   const handleTaskData = async () => {
     const data = {
@@ -90,6 +124,12 @@ export default function Home() {
             </form>
           </div>
         </div>
+
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <ListTask dataList={dataTasks} totalPages={totalPage} />
+        )}
       </div>
     </main>
   );

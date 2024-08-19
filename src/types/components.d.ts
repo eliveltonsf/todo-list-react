@@ -13,3 +13,11 @@ export type TextInputProps = {
 export interface HeaderProps {
   user: string;
 }
+
+export type ButtonProps = {
+  children: ReactNode;
+  isLoading: boolean;
+} & React.DetailedHTMLProps<
+  React.ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+>;
