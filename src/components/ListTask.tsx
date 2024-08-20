@@ -1,22 +1,20 @@
-interface ListTaskProps {
-  dataList: TaskProps[];
-  totalPages: number;
-}
+import { ListTaskProps, UpdateTaskProps } from "../types/task";
+import Task from "./Task";
 
-export interface TaskProps {
-  id: number;
-  title: string;
-  description: string;
-  status: boolean;
-  onCheck?: (checked: UpdateTaskProps) => void;
-}
+const ListTask = ({
+  dataList,
+  totalPages,
+  onUpdateTask,
+  onRemoveTask,
+}: ListTaskProps) => {
+  const sendCheckedTask = (checkedTask: UpdateTaskProps) => {
+    onUpdateTask(checkedTask);
+  };
 
-interface UpdateTaskProps {
-  id: number;
-  status: boolean;
-}
+  const sendDeleteTask = async (id: string) => {
+    onRemoveTask(id);
+  };
 
-const ListTask = ({ dataList, totalPages }: ListTaskProps) => {
   return (
     <div className="flex flex-col h-auto justify-start">
       <ul className="md:max-w-7xl  list-none flex flex-col w-full">
@@ -24,9 +22,22 @@ const ListTask = ({ dataList, totalPages }: ListTaskProps) => {
           return (
             <li key={task.id} className="w-full">
               <div className="flex w-full h-auto gap-3 flex-wrap md:flex-nowrap">
-                <div className="flex flex-col gap-2 w-full">{task.title}</div>
+                <div className="flex flex-col gap-2 w-full">
+                  <Task
+                    id={task.id}
+                    title={task.title}
+                    description={task.description}
+                    status={task.status}
+                    onCheck={sendCheckedTask}
+                  />
+                </div>
                 <div className="flex w-full md:w-auto justify-center items-center h-auto">
-                  <button>Delete</button>
+                  <button
+                    onClick={() => sendDeleteTask(String(task.id))}
+                    className="flex justify-center items-center w-full md:w-16 h-[3rem] px-0 text-white cursor-pointer border-none rounded-lg bg-red-400"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </li>

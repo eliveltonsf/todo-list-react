@@ -7,6 +7,7 @@ import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
 import ListTask, { TaskProps } from "../components/ListTask";
 import api from "../services/api";
+import { UpdateTaskProps } from "../types/task";
 import createTaskFormSchema from "../util/createTaskFormSchema";
 
 export default function Home() {
@@ -85,6 +86,27 @@ export default function Home() {
     });
   };
 
+  const updateTask = async (updateValue: UpdateTaskProps) => {
+    const { id, status } = updateValue;
+    try {
+      await api.patch(`api/task/${id}`, {
+        status,
+      });
+      loadTaskData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeTask = async (id: string) => {
+    try {
+      await api.delete(`api/task/${id}`);
+      loadTaskData();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <main className="flex justify-center items-center overflow-scroll">
       <div className="max-w-7xl h-svh w-full after:contents-[''] after:table after:clear-both p-3 ">
@@ -128,7 +150,12 @@ export default function Home() {
         {loading ? (
           <CircularProgress />
         ) : (
-          <ListTask dataList={dataTasks} totalPages={totalPage} />
+          <ListTask
+            dataList={dataTasks}
+            totalPages={totalPage}
+            onRemoveTask={removeTask}
+            onUpdateTask={updateTask}
+          />
         )}
       </div>
     </main>
