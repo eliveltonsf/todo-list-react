@@ -21,3 +21,8 @@ export type ButtonProps = {
   React.ButtonHTMLAttributes<HTMLButtonElement>,
   HTMLButtonElement
 >;
+
+export type ToastProps = {
+  success: true | false;
+  title: string;
+} & HTMLAttributes<HTMLDivElement>;

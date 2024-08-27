@@ -3,11 +3,13 @@ import { CircularProgress } from "@mui/material";
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Button from "../components/Button";
 import { Header } from "../components/Header";
 import { TextInput } from "../components/Input";
-import ListTask, { TaskProps } from "../components/ListTask";
+import ListTask from "../components/ListTask";
+import { useAuth } from "../hooks/auth";
 import api from "../services/api";
-import { UpdateTaskProps } from "../types/task";
+import { TaskProps, UpdateTaskProps } from "../types/task";
 import createTaskFormSchema from "../util/createTaskFormSchema";
 
 export default function Home() {
@@ -21,6 +23,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [loadingTask, setLoadingTask] = useState(false);
 
   const {
     register,
@@ -30,6 +33,8 @@ export default function Home() {
   } = useForm<CreateTaskFormState>({
     resolver: zodResolver(schema),
   });
+
+  const { name } = useAuth();
 
   const loadTaskData = useCallback(async () => {
     const task = await api.get(`api/task?offset=${currentPage}&limit=5`);
@@ -60,6 +65,7 @@ export default function Home() {
   }, []);
 
   const handleTaskData = async () => {
+    setLoadingTask(true);
     const data = {
       title: taskFormData.title,
       description: taskFormData.description,
@@ -72,9 +78,12 @@ export default function Home() {
         console.log(response);
         setValue("title", "");
         setValue("description", "");
+        setLoadingTask(false);
+        loadTaskData();
       })
       .catch((error) => {
         console.log(error);
+        setLoadingTask(false);
       });
   };
 
@@ -107,10 +116,14 @@ export default function Home() {
     }
   };
 
+  const handleCurrentPage = (currentPage: number) => {
+    setCurrentPage(currentPage);
+  };
+
   return (
     <main className="flex justify-center items-center overflow-scroll">
       <div className="max-w-7xl h-svh w-full after:contents-[''] after:table after:clear-both p-3 ">
-        <Header user="Elivelton" />
+        <Header user={name} />
 
         <div className="h-auto w-full backdrop:blur-sm flex flex-col rounded-lg my-3 flex-wrap mb-6">
           <div className="flex flex-wrap gap-2">
@@ -140,9 +153,12 @@ export default function Home() {
                 autoComplete="off"
               />
 
-              <button className="flex justify-center items-center w-full md:w-16 p-3 text-white cursor-pointer border-none rounded-lg bg-blue-400 max-h-[50px]">
+              <Button
+                isLoading={loadingTask}
+                className="flex justify-center items-center w-full md:w-16 p-3 text-white cursor-pointer border-none rounded-lg bg-blue-400 max-h-[50px]"
+              >
                 Add
-              </button>
+              </Button>
             </form>
           </div>
         </div>
@@ -151,6 +167,7 @@ export default function Home() {
           <CircularProgress />
         ) : (
           <ListTask
+            onPageClick={handleCurrentPage}
             dataList={dataTasks}
             totalPages={totalPage}
             onRemoveTask={removeTask}

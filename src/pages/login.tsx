@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import logo from "../assets/logo.png";
+import Button from "../components/Button";
 import { TextInput } from "../components/Input";
 import { useAuth } from "../hooks/auth";
 import { LoginUserFormProps } from "../types/user";
@@ -84,9 +85,12 @@ export default function Login() {
             register={register}
             errorsLabel={errors.password?.message}
           />
-          <button className="flex justify-center items-center outline-none border-none h-auto py-3 px-6 bg-blue-400 text-white rounded-lg w-full focus:outline-none">
+          <Button
+            isLoading={loading}
+            className="flex justify-center items-center outline-none border-none h-auto py-3 px-6 bg-blue-400 text-white rounded-lg w-full focus:outline-none"
+          >
             Entrar
-          </button>
+          </Button>
 
           <Link to="/cadastro" className="text-gray-400 text-center">
             Cadastrar-se

@@ -1,3 +1,4 @@
+import { SyntheticEvent, useEffect, useState } from "react";
 import { ListTaskProps, UpdateTaskProps } from "../types/task";
 import Task from "./Task";
 
@@ -6,13 +7,34 @@ const ListTask = ({
   totalPages,
   onUpdateTask,
   onRemoveTask,
+  onPageClick,
 }: ListTaskProps) => {
+  const [listCurrentPage, setListCurrentPage] = useState<number[]>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
+    setListCurrentPage([]);
+  }, []);
+
+  useEffect(() => {
+    const dataPageTotal = Array.from(
+      { length: totalPages },
+      (_, index) => index
+    );
+    setListCurrentPage(dataPageTotal);
+  }, [totalPages]);
+
   const sendCheckedTask = (checkedTask: UpdateTaskProps) => {
     onUpdateTask(checkedTask);
   };
 
   const sendDeleteTask = async (id: string) => {
     onRemoveTask(id);
+  };
+
+  const sendCurrentPage = (e: SyntheticEvent<EventTarget>) => {
+    setCurrentPage(Number((e.target as HTMLInputElement).innerHTML));
+    onPageClick(Number((e.target as HTMLInputElement).innerHTML));
   };
 
   return (
@@ -43,6 +65,24 @@ const ListTask = ({
             </li>
           );
         })}
+      </ul>
+
+      <ul className="flex items-center justify-center list-none">
+        {listCurrentPage &&
+          listCurrentPage.map((_, index) => (
+            <li
+              key={index}
+              value={index}
+              onClick={sendCurrentPage}
+              className={
+                currentPage == index + 1
+                  ? "cursor-default flex justify-center items-center h-8 w-8 rounded text-white bg-blue-400 my-6 mx-4"
+                  : "cursor-pointer flex justify-center items-center h-8 w-8 rounded text-white bg-gray-500 my-6 mx-4 hover:opacity-90"
+              }
+            >
+              {index + 1}
+            </li>
+          ))}
       </ul>
     </div>
   );

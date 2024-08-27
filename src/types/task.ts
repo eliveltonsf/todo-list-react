@@ -16,4 +16,5 @@ export interface ListTaskProps {
   totalPages: number;
   onRemoveTask: (id: string) => void;
   onUpdateTask: (updateValue: UpdateTaskProps) => void;
+  onPageClick: (info: number) => void;
 }
